@@ -29,6 +29,12 @@ export async function Footer() {
           </nav>
         </div>
       </div>
+      {/* Add copyright notice */}
+      <div className="container py-4 border-t border-gray-800">
+        <p className="text-sm text-gray-400 text-center">
+          © {new Date().getFullYear()} Your Company Name. All rights reserved.
+        </p>
+      </div>
     </footer>
   )
 }

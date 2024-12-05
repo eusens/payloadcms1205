@@ -7,5 +7,9 @@ import type { Header } from '@/payload-types'
 export async function Header() {
   const header: Header = await getCachedGlobal('header', 1)()
 
-  return <HeaderClient header={header} />
+  return (
+    <div className="bg-gray-500 text-white"> {/* or any other color class you prefer */}
+      <HeaderClient header={header} />
+    </div>
+  )
 }

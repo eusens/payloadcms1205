@@ -214,6 +214,17 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
+    {
+      name: 'price',
+      type: 'number',
+      label: 'Price',
+      admin: {
+        description: 'Product price in dollars',
+        step: 0.01, // Allows for cents
+      },
+      required: true,
+      min: 0, // Prevents negative prices
+    },
     ...slugField(),
   ],
   hooks: {

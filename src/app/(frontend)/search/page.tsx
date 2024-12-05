@@ -7,13 +7,17 @@ import React from 'react'
 import { Post } from '@/payload-types'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
-import { CardPostData } from '@/components/Card'
+
+type SearchResult = Pick<Post, 'id' | 'title' | 'slug' | 'categories' | 'meta'> & {
+  price?: number
+}
 
 type Args = {
   searchParams: Promise<{
     q: string
   }>
 }
+
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
@@ -23,12 +27,13 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     depth: 1,
     limit: 12,
     select: {
+      id: true,
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      price: true,
     },
-    // pagination: false reduces overhead if you don't need totalDocs
     pagination: false,
     ...(query
       ? {
@@ -71,7 +76,10 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <CollectionArchive 
+          posts={posts.docs as SearchResult[]} 
+          urlPrefix="products"
+        />
       ) : (
         <div className="container">No results found.</div>
       )}
@@ -81,6 +89,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: 'Search Products',
+    description: 'Search our products'
   }
 }

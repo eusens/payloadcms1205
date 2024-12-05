@@ -17,19 +17,29 @@ export const Card: React.FC<{
   relationTo?: 'posts'
   showCategories?: boolean
   title?: string
+  isLink?: boolean
+  urlPrefix?: string
 }> = (props) => {
-  const { card, link } = useClickableCard({})
-  const { className, doc, relationTo, showCategories, title: titleFromProps } = props
+  const { card } = useClickableCard({})
+  const { 
+    className, 
+    doc, 
+    relationTo, 
+    showCategories, 
+    title: titleFromProps, 
+    isLink = true,
+    urlPrefix
+  } = props
 
   const { slug, categories, meta, title } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
-  const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
-  const href = `/${relationTo}/${slug}`
+  const sanitizedDescription = description?.replace(/\s/g, ' ')
+  const href = `/${urlPrefix || relationTo}/${slug}`
 
-  return (
+  const CardContent = () => (
     <article
       className={cn(
         'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
@@ -44,41 +54,40 @@ export const Card: React.FC<{
       <div className="p-4">
         {showCategories && hasCategories && (
           <div className="uppercase text-sm mb-4">
-            {showCategories && hasCategories && (
-              <div>
-                {categories?.map((category, index) => {
-                  if (typeof category === 'object') {
-                    const { title: titleFromCategory } = category
+            {categories?.map((category, index) => {
+              if (typeof category === 'object') {
+                const { title: titleFromCategory } = category
+                const categoryTitle = titleFromCategory || 'Untitled category'
+                const isLast = index === categories.length - 1
 
-                    const categoryTitle = titleFromCategory || 'Untitled category'
-
-                    const isLast = index === categories.length - 1
-
-                    return (
-                      <Fragment key={index}>
-                        {categoryTitle}
-                        {!isLast && <Fragment>, &nbsp;</Fragment>}
-                      </Fragment>
-                    )
-                  }
-
-                  return null
-                })}
-              </div>
-            )}
+                return (
+                  <Fragment key={index}>
+                    {categoryTitle}
+                    {!isLast && <Fragment>, &nbsp;</Fragment>}
+                  </Fragment>
+                )
+              }
+              return null
+            })}
           </div>
         )}
         {titleToUse && (
           <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
+            <h3>{titleToUse}</h3>
           </div>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && <div className="mt-2">{sanitizedDescription}</div>}
       </div>
     </article>
+  )
+
+  if (!isLink) {
+    return <CardContent />
+  }
+
+  return (
+    <Link href={href} className="block">
+      <CardContent />
+    </Link>
   )
 }
