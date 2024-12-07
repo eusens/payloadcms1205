@@ -17,8 +17,8 @@ export const generateMeta = async (args: {
     `${getServerSideURL()}`
 
   const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+    ? doc?.meta?.title + ' | Newsino Energy Company Products'
+    : 'Newsino Energy Company Products'
 
   return {
     description: doc?.meta?.description,

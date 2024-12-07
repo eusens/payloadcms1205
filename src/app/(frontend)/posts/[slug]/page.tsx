@@ -19,7 +19,7 @@ export async function generateStaticParams() {
   const posts = await payload.find({
     collection: 'posts',
     draft: false,
-    limit: 1000,
+    limit: 100000,
     overrideAccess: false,
     select: {
       slug: true,
