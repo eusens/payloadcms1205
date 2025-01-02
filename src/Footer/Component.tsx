@@ -32,7 +32,7 @@ export async function Footer() {
       {/* Add copyright notice */}
       <div className="container py-4 border-t border-gray-800">
         <p className="text-sm text-gray-400 text-center">
-          © {new Date().getFullYear()} Your Company Name. All rights reserved.
+          © {new Date().getFullYear()} 1734-aentr.com. All rights reserved.
         </p>
       </div>
     </footer>
